@@ -1,15 +1,15 @@
 """
 Following are the topics we will cover today.
 
-1) Creating and Calling Function
-2) Unnamed and named Parameters
+# 1) Creating and Calling Function
+# 2) Unnamed and named Parameters
 3) Anonymous Lambda Function
 4) Iterator
 5) Generator
 6) Generator vs Iterator
+7) Recursive Function
 
 """
-
 
 # #############################################################################
 # 1) Creating and Calling Function
@@ -53,11 +53,19 @@ Following are the topics we will cover today.
 # 3) Anonymous Lambda Function
 # #############################################################################
 
+"""
+Lambda 
+
+lambda object : operation/expression 
+map(lambda object : operation/expression, iterable object) 
+"""
+
+
 # _add_func = lambda ele_1, ele_2: ele_1 + ele_2
 #
 # _add_func(34, 45)
 #
-# _power = list(map(lambda x: x * x, [1, 2, 3, 4, 5]))
+# _sq = list(map(lambda x: x * x, [1, 2, 3, 4, 5]))
 
 
 # #############################################################################
@@ -85,7 +93,7 @@ Following are the topics we will cover today.
 #             raise StopIteration()
 #
 # data = MyRange(5)
-#
+
 # print(data.next())
 # print(data.next())
 # print(data.next())
@@ -95,7 +103,7 @@ Following are the topics we will cover today.
 # 5) Generator
 # #############################################################################
 
-
+#
 # def simple_generator():
 #     yield 1
 #     yield 2
@@ -106,16 +114,124 @@ Following are the topics we will cover today.
 #     print(item)
 
 
-# def fib(limit):
-#     # Initialize first two Fibonacci Numbers
-#     a, b = 0, 1
+def fib(limit):
+    # Initialize first two Fibonacci Numbers
+    a, b = 0, 1
+
+    # One by one yield next Fibonacci Number
+    while a < limit:
+        yield a
+        a, b = b, a + b
+        print("----", a, b)
+
+
 #
-#     # One by one yield next Fibonacci Number
-#     while a < limit:
-#         yield a
-#         a, b = b, a + b
 #
 # for i in fib(5):
 #     print(i)
 
 
+# def factorial(number):
+#     output = 1
+#     for i in range(1, number+1):
+#         output *= i
+#
+#     return output
+#
+#
+# print(factorial(5))
+
+
+def factorial(number):
+    output = 1
+    fact_no = 1
+
+    while fact_no <= number:
+        output *= fact_no
+        yield output
+        fact_no += 1
+
+
+# for i in factorial(5):
+#     print(i)
+
+from random import random
+
+
+def fiz_buzz(number):
+    iteration_no = 1
+
+    while iteration_no <= number:
+        no = int(random() * 100)
+        op = no
+        if no % 15 == 0:
+            op = 'FizBuz'
+
+        elif no % 5 == 0:
+            op = 'Buz'
+
+        elif no % 3 == 0:
+            op = 'Fiz'
+
+        yield op
+        iteration_no += 1
+
+
+# for i in fiz_buzz(10):
+#     print(i)
+
+def check_fiz_buz(no):
+    op = no
+    if no % 15 == 0:
+        op = 'FizBuz'
+
+    elif no % 5 == 0:
+        op = 'Buz'
+
+    elif no % 3 == 0:
+        op = 'Fiz'
+
+    return op
+
+
+def fiz_buz_2(number):
+    for i in range(0, number):
+        no = int(random() * 100)
+        yield check_fiz_buz(no)
+
+
+# for i in fiz_buz_2(10):
+#     print(i)
+
+# #############################################################################
+# 7) Recursive Function
+# #############################################################################
+
+def prime(limit):
+    for no in range(1, limit + 1):
+        flag = True
+        for divider in range(2, no):
+            if no % divider == 0:
+                flag = False
+                break
+        if flag:
+            print(F"{no} is Prime.")
+
+
+def prime_re(start, limit):
+
+    if start == limit:
+        return
+
+    flag = True
+    for divider in range(2, start):
+        if start % divider == 0:
+            flag = False
+            break
+    if flag:
+        print(F"{start} is Prime.")
+
+    prime_re(start+1, limit)
+
+#
+# prime_re(1, 14)
